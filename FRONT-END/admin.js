@@ -96,7 +96,7 @@ async function updateDashboardStats() {
 
     const products = await response.json();
 
-    const ordersResponse = await fetch("http://https://brainrush-backend.onrender.com/api/orders");
+    const ordersResponse = await fetch("https://brainrush-backend.onrender.com/api/orders");
 
     const orders = await ordersResponse.json();
 
