@@ -624,7 +624,7 @@ function openCheckoutModal() {
 
       try {
         const response = await fetch(
-          "http://https://brainrush-backend.onrender.com/api/orders",
+          "https://brainrush-backend.onrender.com/api/orders",
 
           {
             method: "POST",
