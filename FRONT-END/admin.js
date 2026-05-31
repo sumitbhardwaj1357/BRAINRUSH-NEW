@@ -294,7 +294,7 @@ deleteBtn.addEventListener("click", async () => {
 
   try {
     const response = await fetch(
-      `http://https://brainrush-backend.onrender.com/api/orders/${order.id}`,
+      `https://brainrush-backend.onrender.com/api/orders/${order.id}`,
       {
         method: "DELETE",
       }
