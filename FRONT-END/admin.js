@@ -92,7 +92,7 @@ document.querySelectorAll(".nav-btn").forEach((button) => {
 
 async function updateDashboardStats() {
   try {
-    const response = await fetch("http://https://brainrush-backend.onrender.com/api/products");
+    const response = await fetch("https://brainrush-backend.onrender.com/api/products");
 
     const products = await response.json();
 
