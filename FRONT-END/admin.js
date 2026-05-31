@@ -173,7 +173,7 @@ async function loadOrdersTable() {
   `;
 
   try {
-    const response = await fetch("http://https://brainrush-backend.onrender.com/api/orders");
+    const response = await fetch("https://brainrush-backend.onrender.com/api/orders");
 
     const orders = await response.json();
 
