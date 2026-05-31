@@ -92,11 +92,11 @@ document.querySelectorAll(".nav-btn").forEach((button) => {
 
 async function updateDashboardStats() {
   try {
-    const response = await fetch("http://localhost:5000/api/products");
+    const response = await fetch("http://https://brainrush-backend.onrender.com/api/products");
 
     const products = await response.json();
 
-    const ordersResponse = await fetch("http://localhost:5000/api/orders");
+    const ordersResponse = await fetch("http://https://brainrush-backend.onrender.com/api/orders");
 
     const orders = await ordersResponse.json();
 
@@ -173,7 +173,7 @@ async function loadOrdersTable() {
   `;
 
   try {
-    const response = await fetch("http://localhost:5000/api/orders");
+    const response = await fetch("http://https://brainrush-backend.onrender.com/api/orders");
 
     const orders = await response.json();
 
@@ -294,7 +294,7 @@ deleteBtn.addEventListener("click", async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/orders/${order.id}`,
+      `http://https://brainrush-backend.onrender.com/api/orders/${order.id}`,
       {
         method: "DELETE",
       }
@@ -335,7 +335,7 @@ updateDashboardStats();
         async () => {
           try {
             await fetch(
-              `http://localhost:5000/api/orders/${order.id}`,
+              `http://https://brainrush-backend.onrender.com/api/orders/${order.id}`,
 
               {
                 method: "PUT",
@@ -404,7 +404,7 @@ async function loadProductsGrid() {
   `;
 
   try {
-    const response = await fetch("http://localhost:5000/api/products");
+    const response = await fetch("http://https://brainrush-backend.onrender.com/api/products");
 
     const products = await response.json();
 
@@ -559,7 +559,7 @@ if (productForm) {
     } else {
       /* KEEP OLD IMAGE */
       if (editingProductId) {
-        const response = await fetch("http://localhost:5000/api/products");
+        const response = await fetch("http://https://brainrush-backend.onrender.com/api/products");
 
         const products = await response.json();
 
@@ -587,7 +587,7 @@ async function saveOrUpdateProduct(product) {
 
     if (editingProductId && !product.image) {
       const existingResponse = await fetch(
-        "http://localhost:5000/api/products",
+        "http://https://brainrush-backend.onrender.com/api/products",
       );
 
       const existingProducts = await existingResponse.json();
@@ -605,7 +605,7 @@ async function saveOrUpdateProduct(product) {
 
     if (editingProductId) {
       response = await fetch(
-        `http://localhost:5000/api/products/${editingProductId}`,
+        `http://https://brainrush-backend.onrender.com/api/products/${editingProductId}`,
 
         {
           method: "PUT",
@@ -620,7 +620,7 @@ async function saveOrUpdateProduct(product) {
     } else {
       /* ADD */
       response = await fetch(
-        "http://localhost:5000/api/products",
+        "http://https://brainrush-backend.onrender.com/api/products",
 
         {
           method: "POST",
@@ -674,7 +674,7 @@ function attachProductEvents() {
 
         try {
           const response = await fetch(
-            `http://localhost:5000/api/products/${productId}`,
+            `http://https://brainrush-backend.onrender.com/api/products/${productId}`,
 
             {
               method: "DELETE",
@@ -708,7 +708,7 @@ function attachProductEvents() {
       const productId = card.dataset.productId;
 
       try {
-        const response = await fetch("http://localhost:5000/api/products");
+        const response = await fetch("http://https://brainrush-backend.onrender.com/api/products");
 
         const products = await response.json();
 
@@ -776,7 +776,7 @@ if (clearBtn) {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/orders",
+        "http://https://brainrush-backend.onrender.com/api/orders",
         {
           method: "DELETE",
         }
