@@ -33,7 +33,7 @@ async function loadOrders() {
 
   try {
     const response = await fetch(
-      `http://https://brainrush-backend.onrender.com/api/orders/user/${user.phone}`,
+      `https://brainrush-backend.onrender.com/api/orders/user/${user.phone}`,
     );
     console.log(user.phone);
     console.log(response);
