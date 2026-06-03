@@ -2,304 +2,918 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>BRAINRUSH | Signup</title>
 
-    <link rel="stylesheet" href="style.css" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
 
     <style>
-      body {
-        background: #ffffff;
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        font-family: "Outfit", sans-serif;
+      :root {
+        --red: #e10600;
+        --red-dark: #b00400;
+        --black: #0d0d0d;
+        --dark: #111111;
+        --dark2: #1a1a1a;
+        --dark3: #222222;
+        --mid: #333333;
+        --muted: #888888;
+        --light: #cccccc;
+        --white: #ffffff;
+        --card-bg: rgba(255,255,255,0.04);
+        --card-border: rgba(255,255,255,0.08);
+        --input-bg: rgba(255,255,255,0.05);
+        --input-border: rgba(255,255,255,0.12);
       }
 
-      .auth-section {
-        min-height: 100vh;
+      html, body {
+        min-height: 100%;
+        font-family: 'Barlow', sans-serif;
+        background: var(--black);
+        color: var(--white);
+      }
 
+      /* ============ LAYOUT ============ */
+
+      .page {
         display: flex;
+        min-height: 100vh;
+        overflow: hidden;
+      }
 
-        align-items: center;
+      /* ============ LEFT PANEL ============ */
 
+      .left-panel {
+        flex: 1;
+        position: relative;
+        background: var(--dark);
+        display: flex;
+        flex-direction: column;
         justify-content: center;
-
-        padding: 60px 20px;
+        padding: 60px 56px;
+        overflow: hidden;
       }
 
-      .auth-card {
+      .left-panel::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 60px,
+            rgba(255,255,255,0.015) 60px,
+            rgba(255,255,255,0.015) 61px
+          );
+        pointer-events: none;
+      }
+
+      .left-panel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent, var(--red), transparent);
+        opacity: 0.4;
+      }
+
+      .orb {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(225,6,0,0.12) 0%, transparent 70%);
+        border-radius: 50%;
+        top: -100px;
+        right: -120px;
+        pointer-events: none;
+        animation: orbPulse 6s ease-in-out infinite;
+      }
+
+      .orb2 {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(225,6,0,0.07) 0%, transparent 70%);
+        border-radius: 50%;
+        bottom: -60px;
+        left: -80px;
+        pointer-events: none;
+        animation: orbPulse 8s ease-in-out infinite reverse;
+      }
+
+      @keyframes orbPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.08); opacity: 0.7; }
+      }
+
+      /* Brand */
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 48px;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.1s;
+      }
+
+      .brand-icon {
+        width: 44px;
+        height: 44px;
+        background: var(--red);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .brand-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+      }
+
+      .brand-name {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--white);
+      }
+
+      .brand-name span { color: var(--red); }
+
+      /* Hero headline */
+      .hero-headline {
+        margin-bottom: 18px;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.25s;
+      }
+
+      .eyebrow {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .hero-headline h2 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 3.2rem;
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        color: var(--white);
+      }
+
+      .hero-headline h2 em {
+        font-style: normal;
+        color: var(--red);
+      }
+
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        line-height: 1.65;
+        max-width: 380px;
+        margin-bottom: 44px;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.4s;
+      }
+
+      /* Steps */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 48px;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.55s;
+      }
+
+      .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        position: relative;
+        padding-bottom: 28px;
+      }
+
+      .step:last-child { padding-bottom: 0; }
+
+      .step-line {
+        position: absolute;
+        left: 19px;
+        top: 40px;
+        width: 2px;
+        height: calc(100% - 28px);
+        background: linear-gradient(to bottom, rgba(225,6,0,0.4), transparent);
+      }
+
+      .step:last-child .step-line { display: none; }
+
+      .step-num {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(225,6,0,0.12);
+        border: 1px solid rgba(225,6,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--red);
+      }
+
+      .step-body { padding-top: 8px; }
+
+      .step-body strong {
+        display: block;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 3px;
+      }
+
+      .step-body span {
+        font-size: 0.8rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      /* Quote / testimonial */
+      .testimonial {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-left: 3px solid var(--red);
+        border-radius: 14px;
+        padding: 20px 22px;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.7s;
+      }
+
+      .testimonial p {
+        font-size: 0.88rem;
+        color: var(--light);
+        line-height: 1.65;
+        font-style: italic;
+        margin-bottom: 12px;
+      }
+
+      .testi-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .testi-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .testi-info strong {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--white);
+      }
+
+      .testi-info span {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      /* Hero img overlay */
+      .hero-img-wrap {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 240px;
+        height: 100%;
+        overflow: hidden;
+        opacity: 0;
+        animation: fadeIn 1s ease forwards 0.3s;
+        pointer-events: none;
+      }
+
+      .hero-img-wrap img {
         width: 100%;
-
-        max-width: 480px;
-
-        background: #fff;
-
-        border: 1px solid #eee;
-
-        border-radius: 30px;
-
-        padding: 50px;
-
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        opacity: 0.15;
+        mask-image: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 80%);
+        -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 80%);
+        filter: grayscale(30%) contrast(1.1);
       }
 
-      .auth-logo {
+      /* ============ RIGHT PANEL ============ */
+
+      .right-panel {
+        width: 460px;
+        flex-shrink: 0;
+        background: var(--dark2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 44px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .right-panel::before {
+        content: '';
+        position: absolute;
+        bottom: -180px;
+        left: -180px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(225,6,0,0.07) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .form-wrap {
+        width: 100%;
+        max-width: 360px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Form logo */
+      .form-logo {
+        margin-bottom: 28px;
         text-align: center;
-
-        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.2s;
       }
 
-      .auth-logo h1 {
-        font-family: "Oswald", sans-serif;
-
-        font-size: 3rem;
-
-        color: #e10600;
-
-        margin-bottom: 10px;
+      .form-logo h1 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--white);
       }
 
-      .auth-logo p {
-        color: #666;
+      .form-logo h1 span { color: var(--red); }
 
-        line-height: 1.7;
+      .form-logo p {
+        font-size: 0.84rem;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.5;
+      }
+
+      /* Form inputs */
+      .form-inner {
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.4s;
+      }
+
+      .input-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
       }
 
       .input-group {
-        margin-bottom: 22px;
+        margin-bottom: 16px;
       }
 
       .input-group label {
         display: block;
-
-        margin-bottom: 10px;
-
+        margin-bottom: 7px;
+        font-size: 0.78rem;
         font-weight: 600;
-
-        color: #111;
+        color: var(--light);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
       }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        stroke: var(--muted);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        pointer-events: none;
+        transition: stroke 0.3s;
+      }
+
+      .input-wrap:focus-within .input-icon { stroke: var(--red); }
 
       .input-group input {
         width: 100%;
-
-        padding: 16px;
-
-        border-radius: 16px;
-
-        border: 1px solid #ddd;
-
-        font-family: "Outfit", sans-serif;
-
-        font-size: 15px;
-
+        padding: 13px 13px 13px 38px;
+        border-radius: 12px;
+        border: 1px solid var(--input-border);
         outline: none;
-
-        transition: 0.3s;
-
-        box-sizing: border-box;
+        font-size: 0.88rem;
+        transition: all 0.3s;
+        font-family: 'Barlow', sans-serif;
+        background: var(--input-bg);
+        color: var(--white);
+        letter-spacing: 0.01em;
       }
+
+      .input-group input::placeholder { color: rgba(255,255,255,0.22); }
 
       .input-group input:focus {
-        border-color: #e10600;
+        border-color: var(--red);
+        background: rgba(225,6,0,0.06);
+        box-shadow: 0 0 0 3px rgba(225,6,0,0.12);
       }
 
+      /* Password eye toggle */
+      .eye-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        stroke: var(--muted);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        background: none;
+        border: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: stroke 0.2s;
+      }
+
+      .eye-toggle:hover { stroke: var(--light); }
+      .eye-toggle svg { width: 15px; height: 15px; pointer-events: none; }
+
+      /* Password strength */
+      .pw-strength {
+        margin-top: 7px;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+
+      .strength-bar {
+        flex: 1;
+        height: 3px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.08);
+        transition: background 0.4s;
+      }
+
+      .strength-bar.active-weak   { background: #e10600; }
+      .strength-bar.active-medium { background: #f59e0b; }
+      .strength-bar.active-strong { background: #10b981; }
+
+      .strength-label {
+        font-size: 0.7rem;
+        color: var(--muted);
+        min-width: 42px;
+        text-align: right;
+        transition: color 0.3s;
+      }
+
+      /* Signup button */
       .signup-btn {
         width: 100%;
-
         border: none;
-
-        background: #e10600;
-
-        color: #fff;
-
-        padding: 16px;
-
-        border-radius: 50px;
-
-        font-size: 16px;
-
-        font-weight: 600;
-
+        background: var(--red);
+        color: var(--white);
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
         cursor: pointer;
+        transition: all 0.3s;
+        font-family: 'Barlow', sans-serif;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+        margin-top: 6px;
+      }
 
-        transition: 0.3s;
+      .signup-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.3s;
       }
 
       .signup-btn:hover {
-        background: #111;
+        background: var(--red-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 28px rgba(225,6,0,0.4);
       }
 
+      .signup-btn:hover::before { opacity: 1; }
+      .signup-btn:active { transform: translateY(0); box-shadow: none; }
+      .signup-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; box-shadow: none; }
+
+      /* Message */
+      .message {
+        margin-top: 14px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.83rem;
+        min-height: 20px;
+        letter-spacing: 0.02em;
+      }
+
+      /* Terms notice */
+      .terms-note {
+        font-size: 0.73rem;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 12px;
+        line-height: 1.5;
+      }
+
+      .terms-note a {
+        color: rgba(225,6,0,0.8);
+        text-decoration: none;
+      }
+
+      .terms-note a:hover { color: var(--red); }
+
+      /* Divider */
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 18px 0;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.55s;
+      }
+
+      .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--input-border);
+      }
+
+      .divider span {
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      /* Footer link */
       .auth-footer {
         text-align: center;
-
-        margin-top: 25px;
-
-        color: #666;
+        color: var(--muted);
+        font-size: 0.83rem;
+        opacity: 0;
+        animation: fadeUp 0.6s ease forwards 0.65s;
       }
 
       .auth-footer a {
-        color: #e10600;
-
+        color: var(--red);
         text-decoration: none;
-
-        font-weight: 600;
+        font-weight: 700;
+        transition: opacity 0.2s;
       }
 
-      .message {
-        margin-top: 18px;
+      .auth-footer a:hover { opacity: 0.8; }
 
-        text-align: center;
+      /* ============ ANIMATIONS ============ */
 
-        font-size: 14px;
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
 
-        font-weight: 500;
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+
+      /* ============ MOBILE ============ */
+
+      @media (max-width: 860px) {
+        html, body { overflow: auto; }
+        .page { flex-direction: column; min-height: 100vh; }
+        .left-panel { padding: 36px 28px; flex: none; }
+        .hero-img-wrap { display: none; }
+        .right-panel { width: 100%; padding: 36px 28px 48px; }
+        .hero-headline h2 { font-size: 2.3rem; }
+        .input-row { grid-template-columns: 1fr; }
       }
     </style>
   </head>
 
   <body>
-    <section class="auth-section">
-      <div class="auth-card">
-        <div class="auth-logo">
-          <h1>BRAINRUSH</h1>
+    <div class="page">
 
-          <p>Create your account and fuel your performance journey.</p>
+      <!-- ======== LEFT PANEL ======== -->
+      <div class="left-panel">
+        <div class="orb"></div>
+        <div class="orb2"></div>
+
+        <!-- Hero image — same slot as login page -->
+        <div class="hero-img-wrap" id="heroImgWrap">
+          <img src="" alt="BRAINRUSH athlete" id="heroImg" />
         </div>
 
-        <form id="signupForm">
-          <div class="input-group">
-            <label> Full Name </label>
+        <!-- Brand -->
+        <div class="">
+          <div class="">
+              <path />
+            </svg>
+          </div>
+          <span class="brand-name"><span></span></span>
+        </div>
 
-            <input
-              type="text"
-              id="name"
-              placeholder="Enter your full name"
-              required
-            />
+        <!-- Headline -->
+        <div class="hero-headline">
+          <span class="eyebrow">Start Your Transformation</span>
+          <h2>Build Strength.<br><em>Break Limits.</em><br>Join the Rush.</h2>
+        </div>
+
+        <p class="hero-sub">
+          Join thousands of athletes who've unlocked their full potential with BRAINRUSH - smarter training, real results.
+        </p>
+
+        <!-- Steps -->
+        <div class="steps">
+          <div class="step">
+            <div class="step-line"></div>
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <strong>Create Your Account</strong>
+              <span>Takes less than 60 seconds — no credit card required</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-line"></div>
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <strong>Set Your Fitness Goals</strong>
+              <span>Tell us what you're aiming for — strength, endurance, or weight loss</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-line"></div>
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <strong>Get Your Personalized Plan</strong>
+              <span>AI-crafted workouts and nutrition guidance ready on day one</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="testimonial">
+          <p>"BRAINRUSH completely changed how I train. The personalized plans actually adapt — within 8 weeks I hit a new personal best."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">AK</div>
+            <div class="testi-info">
+              <strong>Arjun Kapoor</strong>
+              <span>Member since 2023 · Lost 14kg</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======== RIGHT PANEL ======== -->
+      <div class="right-panel">
+        <div class="form-wrap">
+
+          <!-- Logo -->
+          <div class="form-logo">
+            <h1>BRAIN<span>RUSH</span></h1>
+            <p>Create your account and fuel your performance journey.</p>
           </div>
 
-          <div class="input-group">
-            <label> Email Address </label>
+          <!-- Form — all original backend logic untouched -->
+          <form id="signupForm" class="form-inner">
 
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              required
-            />
+            <div class="input-group">
+              <label>Full Name</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <input type="text" id="name" placeholder="Enter your full name" required autocomplete="name" />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label>Email Address</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label>Phone Number</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.85a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16l.19.92z"/>
+                </svg>
+                <input type="text" id="phone" placeholder="Enter your phone number" required autocomplete="tel" />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label>Password</label>
+              <div class="input-wrap">
+                <svg class="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" id="password" placeholder="Create a strong password" required autocomplete="new-password" />
+                <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Toggle password visibility">
+                  <svg id="eyeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <!-- Password strength meter -->
+              <div class="pw-strength" id="pwStrength" style="display:none;">
+                <div class="strength-bar" id="bar1"></div>
+                <div class="strength-bar" id="bar2"></div>
+                <div class="strength-bar" id="bar3"></div>
+                <div class="strength-bar" id="bar4"></div>
+                <span class="strength-label" id="strengthLabel"></span>
+              </div>
+            </div>
+
+            <button type="submit" class="signup-btn" id="signupBtn">Create Account</button>
+
+            <div class="message" id="message"></div>
+
+            <p class="terms-note">
+              By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </p>
+          </form>
+
+          <div class="divider">
+            <span>Secure &amp; Encrypted</span>
           </div>
 
-          <div class="input-group">
-            <label> Phone Number </label>
-
-            <input
-              type="text"
-              id="phone"
-              placeholder="Enter your phone number"
-              required
-            />
+          <div class="auth-footer">
+            Already have an account? <a href="login.html">Login</a>
           </div>
 
-          <div class="input-group">
-            <label> Password </label>
-
-            <input
-              type="password"
-              id="password"
-              placeholder="Create password"
-              required
-            />
-          </div>
-
-          <button type="submit" class="signup-btn">Create Account</button>
-
-          <div class="message" id="message"></div>
-        </form>
-
-        <div class="auth-footer">
-          Already have an account?
-
-          <a href="login.html"> Login </a>
         </div>
       </div>
-    </section>
+
+    </div>
 
     <script>
-      const signupForm = document.getElementById("signupForm");
+      /* ========================= */
+      /* PASSWORD TOGGLE */
+      /* ========================= */
+      const eyeToggle = document.getElementById('eyeToggle');
+      const passwordInput = document.getElementById('password');
 
-      signupForm.addEventListener(
-        "submit",
+      const eyeOpen   = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+      const eyeClosed = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
 
-        async (e) => {
-          e.preventDefault();
+      let pwVisible = false;
+      eyeToggle.addEventListener('click', () => {
+        pwVisible = !pwVisible;
+        passwordInput.type = pwVisible ? 'text' : 'password';
+        document.getElementById('eyeIcon').innerHTML = pwVisible ? eyeClosed : eyeOpen;
+      });
 
-          const name = document.getElementById("name").value;
+      /* ========================= */
+      /* PASSWORD STRENGTH METER */
+      /* ========================= */
+      passwordInput.addEventListener('input', () => {
+        const val = passwordInput.value;
+        const meter = document.getElementById('pwStrength');
+        const label = document.getElementById('strengthLabel');
+        const bars  = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
 
-          const email = document.getElementById("email").value;
+        if (!val) { meter.style.display = 'none'; return; }
+        meter.style.display = 'flex';
 
-          const phone = document.getElementById("phone").value;
+        let score = 0;
+        if (val.length >= 8)  score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
 
-          const password = document.getElementById("password").value;
+        const levels = ['', 'active-weak', 'active-medium', 'active-strong', 'active-strong'];
+        const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+        const colors = ['', '#e10600', '#f59e0b', '#10b981', '#10b981'];
 
-          const message = document.getElementById("message");
+        bars.forEach((b, i) => {
+          b.className = 'strength-bar' + (i < score ? ' ' + levels[score] : '');
+        });
 
-          try {
-           const response = await fetch(
-  "https://brainrush-backend.onrender.com/api/auth/signup",
+        label.textContent = labels[score];
+        label.style.color = colors[score];
+      });
 
-              {
-                method: "POST",
+      /* ========================= */
+      /* HERO IMAGE FALLBACK */
+      /* ========================= */
+      const heroImg = document.getElementById('heroImg');
+      heroImg.onerror = () => {
+        document.getElementById('heroImgWrap').style.display = 'none';
+      };
 
-                headers: {
-                  "Content-Type": "application/json",
-                },
+      /* ========================= */
+      /* SIGNUP FORM — original backend, unchanged */
+      /* ========================= */
+      const signupForm = document.getElementById('signupForm');
 
-                body: JSON.stringify({
-                  name,
+      signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-                  email,
+        const name     = document.getElementById('name').value;
+        const email    = document.getElementById('email').value;
+        const phone    = document.getElementById('phone').value;
+        const password = document.getElementById('password').value;
+        const message  = document.getElementById('message');
+        const signupBtn = document.getElementById('signupBtn');
 
-                  phone,
+        signupBtn.textContent = 'Creating account...';
+        signupBtn.disabled = true;
 
-                  password,
-                }),
-              },
-            );
-
-            const data = await response.json();
-
-            if (response.ok) {
-              message.style.color = "#00a651";
-
-              message.innerText = "Signup Successful";
-
-              signupForm.reset();
-
-              setTimeout(() => {
-                window.location.href = "login.html";
-              }, 1500);
-            } else {
-              message.style.color = "#e10600";
-
-              message.innerText = data.message;
+        try {
+          const response = await fetch(
+            'https://brainrush-backend.onrender.com/api/auth/signup',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, phone, password }),
             }
-          } catch (err) {
-            message.style.color = "#e10600";
+          );
 
-            message.innerText = "Something went wrong";
+          const data = await response.json();
+
+          if (response.ok) {
+            message.style.color = '#10b981';
+            message.innerText = '✓ Account created! Redirecting to login...';
+
+            signupForm.reset();
+            document.getElementById('pwStrength').style.display = 'none';
+
+            setTimeout(() => {
+              window.location.href = 'login.html';
+            }, 1500);
+          } else {
+            message.style.color = '#e10600';
+            message.innerText = data.message;
+            signupBtn.textContent = 'Create Account';
+            signupBtn.disabled = false;
           }
-        },
-      );
+        } catch (err) {
+          message.style.color = '#e10600';
+          message.innerText = 'Something went wrong. Please try again.';
+          signupBtn.textContent = 'Create Account';
+          signupBtn.disabled = false;
+        }
+      });
     </script>
   </body>
 </html>
