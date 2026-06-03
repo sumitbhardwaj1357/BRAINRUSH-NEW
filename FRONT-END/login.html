@@ -31,36 +31,87 @@
         --input-focus: rgba(225,6,0,0.6);
       }
 
-      html, body {
-        height: 100%;
+      html {
+        scroll-behavior: smooth;
+        scroll-snap-type: y mandatory;
+      }
+
+      body {
         font-family: 'Barlow', sans-serif;
         background: var(--black);
         color: var(--white);
-        overflow: hidden;
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
 
-      /* ============ LAYOUT ============ */
-
-      .page {
-        display: flex;
+      /* ============ SECTIONS ============ */
+      .section {
         height: 100vh;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        position: relative;
         overflow: hidden;
       }
 
-      /* ============ LEFT PANEL ============ */
+      /* ============ SCROLL HINT ARROW ============ */
+      .scroll-arrow {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        z-index: 10;
+        animation: bounce 2s ease-in-out infinite;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+      }
+      .scroll-arrow:hover { opacity: 1; }
+      .scroll-arrow span {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .scroll-arrow svg {
+        width: 22px; height: 22px;
+        stroke: var(--red);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(8px); }
+      }
+
+      /* ============================================================ */
+      /* SECTION 1 — HERO FULL WIDTH (no right panel)                 */
+      /* ============================================================ */
+
+      #section-hero {
+        display: flex;
+        align-items: center;
+        background: var(--dark);
+        overflow: hidden;
+      }
 
       .left-panel {
-        flex: 1;
+        width: 100%;
+        height: 100%;
         position: relative;
-        background: var(--dark);
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 32px 48px;
+        padding: 48px 10%;
         overflow: hidden;
       }
 
-      /* Background geometric lines */
       .left-panel::before {
         content: '';
         position: absolute;
@@ -76,27 +127,14 @@
         pointer-events: none;
       }
 
-      /* Red accent line left edge */
-      .left-panel::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 1px;
-        height: 100%;
-        background: linear-gradient(to bottom, transparent, var(--red), transparent);
-        opacity: 0.4;
-      }
-
-      /* Glowing orb */
       .orb {
         position: absolute;
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(circle, rgba(225,6,0,0.12) 0%, transparent 70%);
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(circle, rgba(225,6,0,0.1) 0%, transparent 70%);
         border-radius: 50%;
-        top: -100px;
-        right: -120px;
+        top: -200px;
+        right: -150px;
         pointer-events: none;
         animation: orbPulse 6s ease-in-out infinite;
       }
@@ -106,7 +144,6 @@
         50% { transform: scale(1.08); opacity: 0.7; }
       }
 
-      /* Brand */
       .brand {
         display: flex;
         align-items: center;
@@ -114,22 +151,6 @@
         margin-bottom: 24px;
         opacity: 0;
         animation: fadeUp 0.6s ease forwards 0.1s;
-      }
-
-      .brand-icon {
-        width: 44px;
-        height: 44px;
-        background: var(--red);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .brand-icon svg {
-        width: 24px;
-        height: 24px;
-        fill: white;
       }
 
       .brand-name {
@@ -140,11 +161,8 @@
         color: var(--white);
       }
 
-      .brand-name span {
-        color: var(--red);
-      }
+      .brand-name span { color: var(--red); }
 
-      /* Hero headline */
       .hero-headline {
         margin-bottom: 10px;
         opacity: 0;
@@ -164,7 +182,7 @@
 
       .hero-headline h2 {
         font-family: 'Oswald', sans-serif;
-        font-size: 2.6rem;
+        font-size: 3.8rem;
         font-weight: 700;
         line-height: 1.05;
         letter-spacing: -0.01em;
@@ -177,35 +195,36 @@
       }
 
       .hero-sub {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         color: var(--muted);
         line-height: 1.5;
-        max-width: 380px;
-        margin-bottom: 20px;
+        max-width: 480px;
+        margin-bottom: 28px;
         opacity: 0;
         animation: fadeUp 0.6s ease forwards 0.4s;
       }
 
-      /* Feature cards */
       .feature-cards {
         display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 20px;
+        gap: 16px;
+        margin-bottom: 28px;
         opacity: 0;
         animation: fadeUp 0.6s ease forwards 0.55s;
+        flex-wrap: wrap;
       }
 
       .feat-card {
         background: var(--card-bg);
         border: 1px solid var(--card-border);
         border-radius: 14px;
-        padding: 11px 16px;
+        padding: 14px 20px;
         display: flex;
         align-items: center;
         gap: 16px;
         transition: border-color 0.3s, background 0.3s;
         cursor: default;
+        flex: 1;
+        min-width: 220px;
       }
 
       .feat-card:hover {
@@ -225,8 +244,7 @@
       }
 
       .feat-icon svg {
-        width: 20px;
-        height: 20px;
+        width: 20px; height: 20px;
         stroke: var(--red);
         fill: none;
         stroke-width: 1.8;
@@ -247,26 +265,23 @@
         color: var(--muted);
       }
 
-      /* Stats row */
       .stats-row {
         display: flex;
-        gap: 32px;
+        gap: 48px;
         opacity: 0;
         animation: fadeUp 0.6s ease forwards 0.7s;
       }
 
       .stat-number {
         font-family: 'Oswald', sans-serif;
-        font-size: 1.8rem;
+        font-size: 2rem;
         font-weight: 700;
         color: var(--white);
         line-height: 1;
         margin-bottom: 3px;
       }
 
-      .stat-number span {
-        color: var(--red);
-      }
+      .stat-number span { color: var(--red); }
 
       .stat-label {
         font-size: 0.75rem;
@@ -276,120 +291,237 @@
         font-weight: 500;
       }
 
-      /* Floating badge */
-      .badge-pill {
-        position: absolute;
-        bottom: 44px;
-        right: 44px;
-        background: rgba(225,6,0,0.12);
-        border: 1px solid rgba(225,6,0,0.3);
-        border-radius: 100px;
-        padding: 8px 16px 8px 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: #ff7b77;
-        opacity: 0;
-        animation: fadeUp 0.6s ease forwards 0.9s;
-      }
+      /* ============================================================ */
+      /* SECTION 2 — PRODUCT CARD                                     */
+      /* ============================================================ */
 
-      .badge-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--red);
-        animation: blink 2s ease-in-out infinite;
-      }
-
-      @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
-      }
-
-      /* Hero image placeholder (uses actual src from user) */
-      .hero-img-wrap {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 260px;
-        height: 100%;
-        overflow: hidden;
-        opacity: 0;
-        animation: fadeIn 1s ease forwards 0.3s;
-      }
-
-      .hero-img-wrap img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center top;
-        opacity: 0.18;
-        mask-image: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 80%);
-        -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.5) 0%, transparent 80%);
-        filter: grayscale(30%) contrast(1.1);
-      }
-
-      /* ============ RIGHT PANEL ============ */
-
-      .right-panel {
-        width: 440px;
-        flex-shrink: 0;
-        background: var(--dark2);
+      #section-product {
+        background: var(--dark);
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 44px;
-        position: relative;
-        overflow: hidden;
+        padding: 40px;
       }
 
-      .right-panel::before {
+      #section-product::before {
         content: '';
         position: absolute;
-        bottom: -180px;
-        left: -180px;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(225,6,0,0.07) 0%, transparent 70%);
-        border-radius: 50%;
+        inset: 0;
+        background: repeating-linear-gradient(
+          -45deg,
+          transparent, transparent 60px,
+          rgba(255,255,255,0.015) 60px,
+          rgba(255,255,255,0.015) 61px
+        );
         pointer-events: none;
       }
 
-      .form-wrap {
+      .product-section-inner {
+        display: flex;
+        align-items: center;
+        gap: 80px;
+        max-width: 1100px;
         width: 100%;
-        max-width: 340px;
         position: relative;
         z-index: 1;
       }
 
-      /* Form top brand */
-      .form-logo {
-        margin-bottom: 32px;
-        text-align: center;
-        opacity: 0;
-        animation: fadeUp 0.6s ease forwards 0.2s;
+      .product-section-img {
+        flex-shrink: 0;
+        width: 380px;
+        animation: floatImg 4s ease-in-out infinite;
       }
 
-      .form-logo h1 {
+      @keyframes floatImg {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+      }
+
+      .product-section-img img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 20px 60px rgba(225,6,0,0.25));
+      }
+
+      .product-section-info { flex: 1; }
+
+      .product-section-badge {
+        display: inline-block;
+        background: var(--red);
+        color: #fff;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 100px;
+        margin-bottom: 20px;
+      }
+
+      .product-section-info h2 {
         font-family: 'Oswald', sans-serif;
-        font-size: 2.4rem;
+        font-size: 2.8rem;
+        font-weight: 700;
+        line-height: 1.05;
+        color: var(--white);
+        margin-bottom: 16px;
+        letter-spacing: 0.01em;
+      }
+
+      .product-section-info p {
+        font-size: 1rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 28px;
+        max-width: 420px;
+      }
+
+      .product-section-price {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .product-section-price .new-price {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--white);
+      }
+
+      .product-section-price .old-price {
+        font-size: 1.2rem;
+        color: var(--muted);
+        text-decoration: line-through;
+      }
+
+      .product-section-price .discount-tag {
+        background: rgba(225,6,0,0.15);
+        border: 1px solid rgba(225,6,0,0.35);
+        color: #ff7b77;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 100px;
+      }
+
+      .product-flavors {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      .pflavor-btn {
+        border: 1px solid rgba(255,255,255,0.2);
+        background: transparent;
+        color: var(--white);
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-family: 'Barlow', sans-serif;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+
+      .pflavor-btn:hover {
+        border-color: var(--red);
+        color: var(--red);
+      }
+
+      .pflavor-btn.active {
+        background: var(--red);
+        border-color: var(--red);
+        color: #fff;
+      }
+
+      .product-weight { margin-bottom: 28px; }
+
+      .product-weight span {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: var(--light);
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+      }
+
+      .buy-btn {
+        display: inline-block;
+        background: var(--red);
+        color: #fff;
+        border: none;
+        padding: 16px 44px;
+        border-radius: 50px;
+        font-family: 'Barlow', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 8px 28px rgba(225,6,0,0.35);
+      }
+
+      .buy-btn:hover {
+        background: var(--red-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 36px rgba(225,6,0,0.5);
+      }
+
+      /* ============================================================ */
+      /* SECTION 3 — LOGIN FORM ONLY                                  */
+      /* ============================================================ */
+
+      #section-login {
+        background: var(--dark2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #section-login::before {
+        content: '';
+        position: absolute;
+        top: -200px; right: -200px;
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(225,6,0,0.08) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .login-section-wrap {
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+        z-index: 1;
+        padding: 20px;
+      }
+
+      .login-section-logo {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .login-section-logo h1 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2.6rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         color: var(--white);
       }
 
-      .form-logo h1 span { color: var(--red); }
+      .login-section-logo h1 span { color: var(--red); }
 
-      .form-logo p {
-        font-size: 0.85rem;
+      .login-section-logo p {
+        font-size: 0.88rem;
         color: var(--muted);
-        margin-top: 6px;
-        line-height: 1.5;
+        margin-top: 8px;
       }
 
-      /* Tabs */
       .login-tabs {
         display: flex;
         background: rgba(255,255,255,0.04);
@@ -397,8 +529,6 @@
         padding: 4px;
         border-radius: 100px;
         margin-bottom: 28px;
-        opacity: 0;
-        animation: fadeUp 0.6s ease forwards 0.35s;
       }
 
       .tab-btn {
@@ -422,15 +552,7 @@
         box-shadow: 0 4px 20px rgba(225,6,0,0.35);
       }
 
-      /* Inputs */
-      .form-inner {
-        opacity: 0;
-        animation: fadeUp 0.6s ease forwards 0.5s;
-      }
-
-      .input-group {
-        margin-bottom: 18px;
-      }
+      .input-group { margin-bottom: 18px; }
 
       .input-group label {
         display: block;
@@ -442,17 +564,13 @@
         text-transform: uppercase;
       }
 
-      .input-wrap {
-        position: relative;
-      }
+      .input-wrap { position: relative; }
 
       .input-wrap .input-icon {
         position: absolute;
-        left: 14px;
-        top: 50%;
+        left: 14px; top: 50%;
         transform: translateY(-50%);
-        width: 16px;
-        height: 16px;
+        width: 16px; height: 16px;
         stroke: var(--muted);
         fill: none;
         stroke-width: 1.8;
@@ -476,9 +594,7 @@
         letter-spacing: 0.01em;
       }
 
-      .input-group input::placeholder {
-        color: rgba(255,255,255,0.25);
-      }
+      .input-group input::placeholder { color: rgba(255,255,255,0.25); }
 
       .input-group input:focus {
         border-color: var(--red);
@@ -486,13 +602,8 @@
         box-shadow: 0 0 0 3px rgba(225,6,0,0.12);
       }
 
-      .input-group input:focus + .focus-indicator,
-      .input-group input:focus ~ .input-icon,
-      .input-wrap:focus-within .input-icon {
-        stroke: var(--red);
-      }
+      .input-wrap:focus-within .input-icon { stroke: var(--red); }
 
-      /* Login button */
       .login-btn {
         width: 100%;
         border: none;
@@ -512,25 +623,14 @@
         margin-top: 8px;
       }
 
-      .login-btn::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 100%);
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-
       .login-btn:hover {
         background: var(--red-dark);
         transform: translateY(-1px);
         box-shadow: 0 8px 28px rgba(225,6,0,0.4);
       }
 
-      .login-btn:hover::before { opacity: 1; }
       .login-btn:active { transform: translateY(0); box-shadow: none; }
 
-      /* Message */
       .message {
         margin-top: 16px;
         text-align: center;
@@ -540,14 +640,11 @@
         letter-spacing: 0.02em;
       }
 
-      /* Signup */
       .signup-link {
         text-align: center;
         margin-top: 22px;
         color: var(--muted);
         font-size: 0.83rem;
-        opacity: 0;
-        animation: fadeUp 0.6s ease forwards 0.65s;
       }
 
       .signup-link a {
@@ -559,14 +656,11 @@
 
       .signup-link a:hover { opacity: 0.8; }
 
-      /* Divider */
       .divider {
         display: flex;
         align-items: center;
         gap: 12px;
         margin: 20px 0;
-        opacity: 0;
-        animation: fadeUp 0.6s ease forwards 0.6s;
       }
 
       .divider::before, .divider::after {
@@ -585,50 +679,12 @@
         white-space: nowrap;
       }
 
-      /* ============ ANIMATIONS ============ */
-
-      @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(18px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to   { opacity: 1; }
-      }
-
-      /* ============ MOBILE ============ */
-
-      @media (max-width: 800px) {
-        html, body { overflow: auto; }
-
-        .page { flex-direction: column; height: auto; min-height: 100vh; }
-
-        .left-panel {
-          padding: 36px 28px;
-          flex: none;
-        }
-
-        .hero-img-wrap { display: none; }
-
-        .right-panel {
-          width: 100%;
-          padding: 36px 28px 48px;
-        }
-
-        .hero-headline h2 { font-size: 2.4rem; }
-
-        .stats-row { gap: 20px; }
-      }
-
-      /* Password eye toggle */
+      /* ============ EYE TOGGLE ============ */
       .eye-toggle {
         position: absolute;
-        right: 14px;
-        top: 50%;
+        right: 14px; top: 50%;
         transform: translateY(-50%);
-        width: 16px;
-        height: 16px;
+        width: 16px; height: 16px;
         cursor: pointer;
         stroke: var(--muted);
         fill: none;
@@ -647,30 +703,47 @@
       .eye-toggle:hover { stroke: var(--light); }
       .eye-toggle svg { width: 16px; height: 16px; pointer-events: none; }
 
+      /* ============ ANIMATIONS ============ */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+
+      /* ============ MOBILE ============ */
+      @media (max-width: 800px) {
+        .left-panel { padding: 36px 28px; }
+        .hero-headline h2 { font-size: 2.6rem; }
+        .feature-cards { flex-direction: column; }
+        .stats-row { gap: 20px; }
+
+        #section-product { padding: 30px 20px; }
+        .product-section-inner { flex-direction: column; gap: 30px; text-align: center; }
+        .product-section-img { width: 260px; }
+        .product-section-info h2 { font-size: 2rem; }
+        .product-flavors { justify-content: center; }
+      }
     </style>
   </head>
 
   <body>
-    <div class="page">
 
-      <!-- ======== LEFT PANEL ======== -->
+    <!-- ======================================================== -->
+    <!-- SECTION 1 — HERO FULL WIDTH                              -->
+    <!-- ======================================================== -->
+    <section class="section" id="section-hero">
+
       <div class="left-panel">
         <div class="orb"></div>
 
-        <!-- Hero image — replace src with your image path -->
-        <div class="hero-img-wrap" id="heroImgWrap">
-          <img src="" alt="BRAINRUSH athlete" id="heroImg" />
-        </div>
-
-        <!-- Brand -->
         <div class="brand">
-          <div class=>
-            </svg>
-          </div>
-       
+          <span class="brand-name">BRAIN<span>RUSH</span></span>
         </div>
 
-        <!-- Headline -->
         <div class="hero-headline">
           <span class="eyebrow">Your Performance, Unleashed</span>
           <h2>Train Smarter.<br><em>Go Harder.</em><br>Live Better.</h2>
@@ -680,37 +753,28 @@
           The all-in-one fitness platform that adapts to your goals — personalized plans, expert coaching, and real-time progress tracking.
         </p>
 
-        <!-- Feature cards -->
         <div class="feature-cards">
           <div class="feat-card">
             <div class="feat-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
             <div class="feat-text">
               <strong>Real-Time Progress Tracking</strong>
               <span>Monitor every rep, set, and milestone as it happens</span>
             </div>
           </div>
-
           <div class="feat-card">
             <div class="feat-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="feat-text">
               <strong>Expert Coaching Network</strong>
               <span>Connect with certified trainers and nutritionists</span>
             </div>
           </div>
-
           <div class="feat-card">
             <div class="feat-icon">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             </div>
             <div class="feat-text">
               <strong>Personalized Workout Plans</strong>
@@ -719,7 +783,6 @@
           </div>
         </div>
 
-        <!-- Stats -->
         <div class="stats-row">
           <div class="stat-item">
             <div class="stat-number">50<span>K+</span></div>
@@ -734,194 +797,205 @@
             <div class="stat-label">Satisfaction</div>
           </div>
         </div>
-
-        <!-- Live badge -->
       </div>
 
-      <!-- ======== RIGHT PANEL ======== -->
-      <div class="right-panel">
-        <div class="form-wrap">
+      <!-- Scroll hint -->
+      <div class="scroll-arrow" onclick="document.getElementById('section-product').scrollIntoView({behavior:'smooth'})">
+        <span>See Product</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
 
-          <!-- Logo -->
-          <div class="form-logo">
-            <h1>BRAIN<span>RUSH</span></h1>
-            <p id="loginDescription">Welcome back. Continue your fitness journey.</p>
-          </div>
 
-          <!-- Tabs -->
-          <div class="login-tabs">
-            <button class="tab-btn active" id="userTab">User Login</button>
-            <button class="tab-btn" id="adminTab">Admin Login</button>
-          </div>
+    <!-- ======================================================== -->
+    <!-- SECTION 2 — PRODUCT CARD                                 -->
+    <!-- ======================================================== -->
+    <section class="section" id="section-product">
 
-          <!-- Form -->
-          <form id="loginForm" class="form-inner">
+      <div class="product-section-inner">
 
-            <div class="input-group">
-              <label>Email Address</label>
-              <div class="input-wrap">
-                <svg class="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-                </svg>
-                <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label>Password</label>
-              <div class="input-wrap">
-                <svg class="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-                <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password" />
-                <button type="button" class="eye-toggle" id="eyeToggle" aria-label="Toggle password visibility" title="Show/hide password">
-                  <svg id="eyeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" class="login-btn" id="loginBtn">Login</button>
-
-            <div class="message" id="message"></div>
-          </form>
-
-          <div class="divider">
-            <span>Secure &amp; Encrypted</span>
-          </div>
-
-          <div class="signup-link" id="signupBox">
-            Don't have an account? <a href="signup.html">Sign up free</a>
-          </div>
-
+        <div class="product-section-img">
+          <img src="assets/PRODUCT 1.jpg" alt="BRAINRUSH Pre-Workout" />
         </div>
+
+        <div class="product-section-info">
+          <span class="product-section-badge"> Bestseller</span>
+
+          <h2>High Stim<br>Pre-Workout</h2>
+
+          <p>Experience unmatched pumps, insane energy and tunnel focus with BRAINRUSH premium pre-workout formula.</p>
+
+          <div class="product-section-price">
+            <span class="new-price">Rs 1600</span>
+            <span class="old-price">Rs 2600</span>
+            <span class="discount-tag">38% OFF</span>
+          </div>
+
+          <div class="product-flavors">
+            <button class="pflavor-btn active">Mix Fruit</button>
+            <button class="pflavor-btn">Blue Raspberry</button>
+          </div>
+
+          <div class="product-weight">
+            <span>450G</span>
+          </div>
+
+          <button class="buy-btn" id="buyNowBtn">Buy Now — Login to Order</button>
+        </div>
+
       </div>
 
-    </div>
+      <!-- Scroll hint -->
+      <div class="scroll-arrow" onclick="document.getElementById('section-login').scrollIntoView({behavior:'smooth'})">
+        <span>Login to Order</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+
+    <!-- ======================================================== -->
+    <!-- SECTION 3 — LOGIN FORM                                   -->
+    <!-- ======================================================== -->
+    <section class="section" id="section-login">
+
+      <div class="login-section-wrap">
+
+        <div class="login-section-logo">
+          <h1>BRAIN<span>RUSH</span></h1>
+          <p id="loginDescription2">Login to complete your order</p>
+        </div>
+
+        <div class="login-tabs" style="margin-bottom:24px;">
+          <button class="tab-btn active" id="userTab2">User Login</button>
+          <button class="tab-btn" id="adminTab2">Admin Login</button>
+        </div>
+
+        <form id="loginForm2">
+          <div class="input-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input type="email" id="email2" placeholder="you@example.com" required autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="password2" placeholder="Enter your password" required autocomplete="current-password" />
+              <button type="button" class="eye-toggle" id="eyeToggle2">
+                <svg id="eyeIcon2" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn2">LOGIN</button>
+          <div class="message" id="message2"></div>
+        </form>
+
+        <div class="divider" style="margin-top:20px;"><span>Secure &amp; Encrypted</span></div>
+
+        <div class="signup-link">
+          Don't have an account? <a href="signup.html">Sign up free</a>
+        </div>
+
+      </div>
+    </section>
+
 
     <script>
-      /* ========================= */
-      /* TAB LOGIC (unchanged) */
-      /* ========================= */
-      let loginType = 'user';
-
-      const userTab = document.getElementById('userTab');
-      const adminTab = document.getElementById('adminTab');
-      const signupBox = document.getElementById('signupBox');
-      const loginDescription = document.getElementById('loginDescription');
-
-      userTab.addEventListener('click', () => {
-        loginType = 'user';
-        userTab.classList.add('active');
-        adminTab.classList.remove('active');
-        signupBox.style.display = 'block';
-        loginDescription.innerText = 'Welcome back. Continue your fitness journey.';
+      /* FLAVOR TOGGLE */
+      document.querySelectorAll('.pflavor-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.pflavor-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
       });
 
-      adminTab.addEventListener('click', () => {
-        loginType = 'admin';
-        adminTab.classList.add('active');
-        userTab.classList.remove('active');
-        signupBox.style.display = 'none';
-        loginDescription.innerText = 'Secure admin dashboard access.';
+      /* BUY NOW → SCROLL TO LOGIN */
+      document.getElementById('buyNowBtn').addEventListener('click', () => {
+        document.getElementById('section-login').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => document.getElementById('email2').focus(), 800);
       });
 
-      /* ========================= */
+      /* TAB LOGIC — Section 3 */
+      let loginType2 = 'user';
+      const userTab2 = document.getElementById('userTab2');
+      const adminTab2 = document.getElementById('adminTab2');
+      const loginDescription2 = document.getElementById('loginDescription2');
+
+      userTab2.addEventListener('click', () => {
+        loginType2 = 'user';
+        userTab2.classList.add('active'); adminTab2.classList.remove('active');
+        loginDescription2.innerText = 'Login to complete your order';
+      });
+
+      adminTab2.addEventListener('click', () => {
+        loginType2 = 'admin';
+        adminTab2.classList.add('active'); userTab2.classList.remove('active');
+        loginDescription2.innerText = 'Secure admin dashboard access.';
+      });
+
       /* PASSWORD TOGGLE */
-      /* ========================= */
-      const eyeToggle = document.getElementById('eyeToggle');
-      const passwordInput = document.getElementById('password');
-
       const eyeOpen = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
       const eyeClosed = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
-
-      let pwVisible = false;
-      eyeToggle.addEventListener('click', () => {
-        pwVisible = !pwVisible;
-        passwordInput.type = pwVisible ? 'text' : 'password';
-        document.getElementById('eyeIcon').innerHTML = pwVisible ? eyeClosed : eyeOpen;
+      let pwVisible2 = false;
+      document.getElementById('eyeToggle2').addEventListener('click', () => {
+        pwVisible2 = !pwVisible2;
+        document.getElementById('password2').type = pwVisible2 ? 'text' : 'password';
+        document.getElementById('eyeIcon2').innerHTML = pwVisible2 ? eyeClosed : eyeOpen;
       });
 
-      /* ========================= */
-      /* LOGIN FORM (original backend — unchanged) */
-      /* ========================= */
-      const loginForm = document.getElementById('loginForm');
-
-      loginForm.addEventListener('submit', async (e) => {
+      /* LOGIN SUBMIT */
+      document.getElementById('loginForm2').addEventListener('submit', async (e) => {
         e.preventDefault();
+        const email = document.getElementById('email2').value;
+        const password = document.getElementById('password2').value;
+        const messageEl = document.getElementById('message2');
+        const btnEl = document.getElementById('loginBtn2');
 
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const message = document.getElementById('message');
-        const loginBtn = document.getElementById('loginBtn');
-
-        loginBtn.textContent = 'Logging in...';
-        loginBtn.disabled = true;
+        btnEl.textContent = 'Logging in...';
+        btnEl.disabled = true;
 
         try {
-          const response = await fetch(
-            'https://brainrush-backend.onrender.com/api/auth/login',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password }),
-            }
-          );
+          const response = await fetch('https://brainrush-backend.onrender.com/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
 
           const data = await response.json();
 
           if (response.ok) {
-            console.log(data);
-
-            localStorage.setItem(
-              'brainrushUser',
-              JSON.stringify({
-                id: data.user.id,
-                name: data.user.name,
-                email: data.user.email,
-                phone: data.user.phone,
-                role: data.user.role,
-              })
-            );
-
+            localStorage.setItem('brainrushUser', JSON.stringify({
+              id: data.user.id, name: data.user.name,
+              email: data.user.email, phone: data.user.phone, role: data.user.role,
+            }));
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            console.log('USER SAVED', localStorage.getItem('brainrushUser'));
-
-            message.style.color = '#00d68f';
-            message.innerText = '✓ Login successful — redirecting...';
+            messageEl.style.color = '#00d68f';
+            messageEl.innerText = '✓ Login successful — redirecting...';
 
             setTimeout(() => {
-              if (data.user.role === 'admin') {
-                window.location.href = 'admin.html';
-              } else {
-                window.location.href = 'index.html';
-              }
+              window.location.href = data.user.role === 'admin' ? 'admin.html' : 'index.html';
             }, 1000);
           } else {
-            message.style.color = '#e10600';
-            message.innerText = data.message;
-            loginBtn.textContent = 'Login';
-            loginBtn.disabled = false;
+            messageEl.style.color = '#e10600';
+            messageEl.innerText = data.message;
+            btnEl.textContent = 'LOGIN';
+            btnEl.disabled = false;
           }
         } catch (err) {
-          message.style.color = '#e10600';
-          message.innerText = 'Something went wrong. Please try again.';
-          loginBtn.textContent = 'Login';
-          loginBtn.disabled = false;
+          messageEl.style.color = '#e10600';
+          messageEl.innerText = 'Something went wrong. Please try again.';
+          btnEl.textContent = 'LOGIN';
+          btnEl.disabled = false;
         }
       });
-
-      /* ========================= */
-      /* HERO IMAGE FALLBACK */
-      /* ========================= */
-      const heroImg = document.getElementById('heroImg');
-      heroImg.onerror = () => {
-        document.getElementById('heroImgWrap').style.display = 'none';
-      };
-
     </script>
   </body>
 </html>
