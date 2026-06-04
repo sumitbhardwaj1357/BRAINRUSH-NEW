@@ -242,6 +242,10 @@ async function loadOrdersTable() {
           ${order.total}
         </td>
 
+        <td style="font-weight:700; color:${order.payment_method === 'UPI' ? '#f7c948' : '#aaa'};">
+          ${order.payment_method || "COD"}
+        </td>
+
         <td>
           ${new Date(order.created_at).toLocaleDateString("en-IN")}
         </td>
@@ -279,6 +283,7 @@ async function loadOrdersTable() {
         </td>
 
        <td>
+  ${order.payment_method === "UPI" ? `<button class="confirm-upi-btn" style="background:#25D366;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:13px;margin-bottom:6px;width:100%;">✅ Confirm UPI</button><br>` : ""}
   <button class="delete-order-btn">
     Delete
   </button>
@@ -287,6 +292,35 @@ async function loadOrdersTable() {
       `;
 
       tableBody.appendChild(row);
+
+      // UPI Confirm button
+      const confirmUpiBtn = row.querySelector(".confirm-upi-btn");
+      if (confirmUpiBtn) {
+        confirmUpiBtn.addEventListener("click", async () => {
+          try {
+            const res = await fetch(
+              `https://brainrush-backend.onrender.com/api/orders/${order.id}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "Processing" }),
+              }
+            );
+            if (res.ok) {
+              confirmUpiBtn.innerText = " UPI Confirmed";
+              confirmUpiBtn.style.background = "#1a1a1a";
+              confirmUpiBtn.style.color = "#25D366";
+              confirmUpiBtn.disabled = true;
+              showToast("UPI Payment Confirmed!");
+            } else {
+              showToast("Confirm failed");
+            }
+          } catch (err) {
+            showToast("Error confirming UPI");
+          }
+        });
+      }
+
       const deleteBtn = row.querySelector(".delete-order-btn");
 
 deleteBtn.addEventListener("click", async () => {
@@ -792,5 +826,3 @@ if (clearBtn) {
     }
   });
 }
-
-
