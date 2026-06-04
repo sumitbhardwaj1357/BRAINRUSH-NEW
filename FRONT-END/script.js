@@ -423,6 +423,8 @@ function openCheckoutModal() {
       flex-direction:column;
       gap:18px;
       box-shadow:0 0 40px rgba(255,0,0,0.15);
+      max-height:90vh;
+      overflow-y:auto;
     "
   >
 
@@ -541,12 +543,115 @@ function openCheckoutModal() {
       "
     ></textarea>
 
+    <!-- PAYMENT METHOD SELECTION -->
+    <p style="color:#aaa; font-size:14px; margin-bottom:-8px;">Select Payment Method</p>
+
+    <div style="display:flex; gap:12px;">
+
+      <button
+        id="btnCOD"
+        style="
+          flex:1;
+          padding:16px;
+          border:2px solid #ff1010;
+          border-radius:16px;
+          background:#ff1010;
+          color:#fff;
+          font-size:16px;
+          font-weight:700;
+          cursor:pointer;
+        "
+      >
+        Cash on Delivery
+      </button>
+
+      <button
+        id="btnUPI"
+        style="
+          flex:1;
+          padding:16px;
+          border:2px solid #333;
+          border-radius:16px;
+          background:#161616;
+          color:#aaa;
+          font-size:16px;
+          font-weight:700;
+          cursor:pointer;
+        "
+      >
+        UPI / QR Pay
+      </button>
+
+    </div>
+
+    <!-- UPI QR SECTION (hidden by default) -->
+    <div
+      id="upiSection"
+      style="
+        display:none;
+        flex-direction:column;
+        align-items:center;
+        gap:14px;
+        background:#111;
+        border:1px solid #2a2a2a;
+        border-radius:18px;
+        padding:24px;
+        text-align:center;
+      "
+    >
+
+      <p style="color:#fff; font-size:15px; font-weight:600; margin:0;">
+        Scan QR Code to Pay
+      </p>
+
+      <!-- REPLACE src below with your actual QR image path e.g. "upi-qr.png" -->
+      <img
+        src="QR.jpeg"
+        alt="UPI QR Code"
+        style="
+          width:200px;
+          height:200px;
+          border-radius:12px;
+          border:2px solid #333;
+          object-fit:contain;
+          background:#fff;
+          padding:8px;
+        "
+        onerror="this.style.background='#1a1a1a'; this.alt='QR Code Placeholder'; this.src=''; this.style.display='flex';"
+      />
+
+      <p style="color:#aaa; font-size:13px; margin:0; line-height:1.6;">
+        After payment, send your <strong style="color:#fff;">Transaction ID</strong> + Screenshot to WhatsApp
+      </p>
+
+      <a
+        id="upiWhatsappBtn"
+        href="#"
+        target="_blank"
+        style="
+          display:inline-block;
+          background:#25D366;
+          color:#fff;
+          font-weight:700;
+          font-size:15px;
+          padding:14px 28px;
+          border-radius:14px;
+          text-decoration:none;
+          width:100%;
+          box-sizing:border-box;
+        "
+      >
+        Share Transaction ID on WhatsApp
+      </a>
+
+    </div>
+
     <button
       class="checkout-btn"
       id="placeOrderBtn"
       style="
         width:100%;
-        margin-top:10px;
+        margin-top:4px;
         padding:18px;
         border:none;
         border-radius:18px;
@@ -557,9 +662,7 @@ function openCheckoutModal() {
         cursor:pointer;
       "
     >
-
       Place Order
-
     </button>
 
   </div>
@@ -568,6 +671,160 @@ function openCheckoutModal() {
 
   document.body.appendChild(overlay);
 
+  /* ---- PAYMENT METHOD TOGGLE ---- */
+  let selectedPayment = "COD";
+
+  const btnCOD = overlay.querySelector("#btnCOD");
+  const btnUPI = overlay.querySelector("#btnUPI");
+  const upiSection = overlay.querySelector("#upiSection");
+
+  function selectCOD() {
+    selectedPayment = "COD";
+    btnCOD.style.background = "#ff1010";
+    btnCOD.style.borderColor = "#ff1010";
+    btnCOD.style.color = "#fff";
+    btnUPI.style.background = "#161616";
+    btnUPI.style.borderColor = "#333";
+    btnUPI.style.color = "#aaa";
+    upiSection.style.display = "none";
+  }
+
+  function selectUPI() {
+    selectedPayment = "UPI";
+    btnUPI.style.background = "#ff1010";
+    btnUPI.style.borderColor = "#ff1010";
+    btnUPI.style.color = "#fff";
+    btnCOD.style.background = "#161616";
+    btnCOD.style.borderColor = "#333";
+    btnCOD.style.color = "#aaa";
+    upiSection.style.display = "flex";
+
+    // Build WhatsApp message with order total
+    const total = "Rs " + cart.reduce((sum, item) => {
+      return sum + (parseInt(item.price.replace(/\D/g, "")) || 0) * item.qty;
+    }, 0);
+
+    const upiMsg = `Hi, I completed UPI payment for my BRAINRUSH order.\n\nOrder Total: ${total}\n\nTransaction ID: [PASTE HERE]\n\n[Please attach screenshot]`;
+
+    // TODO: Replace 91XXXXXXXXXX with your actual UPI WhatsApp number
+    overlay.querySelector("#upiWhatsappBtn").href =
+      `https://api.whatsapp.com/send?phone=917888309962&text=${encodeURIComponent(upiMsg)}`;
+  }
+
+  btnCOD.addEventListener("click", selectCOD);
+  btnUPI.addEventListener("click", selectUPI);
+
+  /* ---- CLOSE BUTTON ---- */
+  overlay.querySelector("#closeCheckoutModal").addEventListener("click", () => overlay.remove());
+
+  /* ---- UPI WAITING SCREEN ---- */
+  function showUPIWaitingScreen(orderId) {
+    overlay.remove();
+
+    const waitOverlay = document.createElement("div");
+    waitOverlay.classList.add("cart-modal");
+    waitOverlay.id = "upiWaitOverlay";
+
+    waitOverlay.innerHTML = `
+      <div style="
+        width:100%;
+        max-width:420px;
+        background:#0d0d0d;
+        border:1px solid #222;
+        border-radius:28px;
+        padding:40px 32px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:20px;
+        text-align:center;
+        box-shadow:0 0 40px rgba(255,0,0,0.15);
+      ">
+
+        <div id="upiWaitIcon" style="font-size:52px;">⏳</div>
+
+        <h2 id="upiWaitTitle" style="
+          color:#fff;
+          font-family:'Oswald',sans-serif;
+          font-size:28px;
+          margin:0;
+        ">Waiting for Confirmation...</h2>
+
+        <p id="upiWaitMsg" style="
+          color:#888;
+          font-size:14px;
+          line-height:1.7;
+          margin:0;
+        ">
+          Share your Transaction ID + Screenshot on WhatsApp.<br>
+          We'll confirm your payment shortly.
+        </p>
+
+        <div id="upiCountdownWrap" style="color:#555; font-size:13px;">
+          Auto-closing in <span id="upiCountdown">60</span>s
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(waitOverlay);
+
+    let seconds = 60;
+    let confirmed = false;
+
+    // Poll backend every 5s to check if admin confirmed
+    const pollInterval = setInterval(async () => {
+      try {
+        const res = await fetch(`https://brainrush-backend.onrender.com/api/orders`);
+        const orders = await res.json();
+        const thisOrder = orders.find(o => String(o.id) === String(orderId));
+
+        if (thisOrder && (thisOrder.status === "Processing" || thisOrder.status === "Shipped" || thisOrder.status === "Delivered")) {
+          confirmed = true;
+          clearInterval(pollInterval);
+          clearInterval(countdownInterval);
+
+          document.getElementById("upiWaitIcon").innerText = "✅";
+          document.getElementById("upiWaitTitle").innerText = "Payment Confirmed!";
+          document.getElementById("upiWaitTitle").style.color = "#25D366";
+          document.getElementById("upiWaitMsg").innerText = "Your order has been placed successfully. Thank you! 😊";
+          document.getElementById("upiCountdownWrap").style.display = "none";
+
+          setTimeout(() => {
+            waitOverlay.remove();
+          }, 3000);
+        }
+      } catch (err) {
+        console.log("Polling error:", err);
+      }
+    }, 5000);
+
+    // Countdown timer
+    const countdownInterval = setInterval(() => {
+      seconds--;
+      const el = document.getElementById("upiCountdown");
+      if (el) el.innerText = seconds;
+
+      if (seconds <= 0) {
+        clearInterval(countdownInterval);
+        clearInterval(pollInterval);
+
+        if (!confirmed) {
+          document.getElementById("upiWaitIcon").innerText = "🎉";
+          document.getElementById("upiWaitTitle").innerText = "Order Placed!";
+          document.getElementById("upiWaitTitle").style.color = "#fff";
+          document.getElementById("upiWaitMsg").innerText = "We'll verify your UPI payment and process your order shortly.";
+          document.getElementById("upiCountdownWrap").style.display = "none";
+
+          setTimeout(() => {
+            waitOverlay.remove();
+          }, 2500);
+        }
+      }
+    }, 1000);
+  }
+
+  /* ---- PLACE ORDER ---- */
   document.getElementById("placeOrderBtn").addEventListener(
     "click",
 
@@ -619,7 +876,7 @@ function openCheckoutModal() {
             0,
           ),
 
-        payment_method: "COD",
+        payment_method: selectedPayment,
       };
 
       try {
@@ -640,15 +897,24 @@ function openCheckoutModal() {
         const data = await response.json();
 
         if (response.ok) {
-          showToast("Order placed! Thank you 😊");
-
           localStorage.removeItem("brainrushCart");
 
           cart = [];
 
           updateCartCount();
 
-          overlay.remove();
+          if (selectedPayment === "UPI") {
+            // Open WhatsApp then show waiting screen
+            const orderId = data.id || data.order?.id || data.orderId || "";
+            const total = orderData.total;
+            const upiMsg = `Hi, I completed UPI payment for my BRAINRUSH order.\n\nOrder Total: ${total}\nOrder ID: ${orderId}\n\nTransaction ID: [PASTE HERE]\n\n[Please attach screenshot]`;
+            // TODO: Replace 91XXXXXXXXXX with your actual UPI WhatsApp number
+            window.open(`https://api.whatsapp.com/send?phone=917888309962&text=${encodeURIComponent(upiMsg)}`, "_blank");
+            showUPIWaitingScreen(orderId);
+          } else {
+            showToast("Order placed! Thank you 😊");
+            overlay.remove();
+          }
         } else {
           showToast(data.message);
         }
@@ -703,7 +969,7 @@ Product: BRAINRUSH PRE-WORKOUT
 Flavor: ${flavor}
 Quantity: ${qty}`;
 
-    const whatsappURL = `https://api.whatsapp.com/send?phone=917814296292&text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://api.whatsapp.com/send?phone=917888309962&text=${encodeURIComponent(message)}`;
 
     window.open(whatsappURL, "_blank");
   }
